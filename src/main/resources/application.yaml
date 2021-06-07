@@ -1,0 +1,25 @@
+# Database settings
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/mall
+    username: root
+    password: root
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+# Log settings
+#logging:
+#  level:
+#    root: warn
+#  file:
+#    path: logs
+#  level:
+#    cupper.hj2.mall.logger: info
+
+# Dynamodb settings
+
+# session settings
+session:
+  issuer: https://cupper.mail.com
+  expiration_time: 3600
+  table_name: cupper-Session
+  secret: secret00
