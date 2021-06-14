@@ -12,8 +12,4 @@ class UserModel(
     fun checkPassword(password: Password): Boolean {
         return password.hashedValue() == user.password
     }
-
-    fun newToken(): Session {
-        return sessionRepository.newSession(user.loginId)
-    }
 }

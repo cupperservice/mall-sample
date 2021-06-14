@@ -1,4 +1,4 @@
-package cupper.hj2.mall.filter
+package cupper.hj2.mall.interceptor
 
 import org.springframework.core.annotation.Order
 import org.springframework.stereotype.Component

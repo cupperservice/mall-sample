@@ -26,9 +26,12 @@ dependencies {
 	implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
 	implementation(platform("software.amazon.awssdk:bom:2.15.0"))
 	implementation("software.amazon.awssdk:dynamodb")
-//	implementation("com.amazonaws:aws-java-sdk-dynamodb:1.11.1029")
 	implementation("com.auth0:java-jwt:3.16.0")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
+	testImplementation("net.bytebuddy:byte-buddy:1.9.12")
+	testImplementation("com.ninja-squad:springmockk:1.1.2")
+//	testImplementation("org.junit.jupiter:junit-jupiter:5.5.1")
+//	testImplementation("com.ninja-squad:springmockk:1.1.2")
 	runtimeOnly("mysql:mysql-connector-java")
 }
 

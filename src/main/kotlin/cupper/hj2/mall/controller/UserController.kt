@@ -25,12 +25,17 @@ class UserController(
         @RequestBody
         request: LoginRequest
     ): LoginResponse {
-        val user = loginService.login(LoginId(request.login_id), Password(request.password))
-        return if (user == null) {
+        val session = loginService.login(LoginId(request.login_id), Password(request.password))
+        return if (session == null) {
             throw HttpStatus404()
         } else {
-            LoginResponse(user.newToken().encodedValue)
+            LoginResponse(session.encodedValue)
         }
+    }
+
+    @PostMapping(value = ["/logout"], produces = [MediaType.APPLICATION_JSON_VALUE])
+    fun logout(): String {
+        TODO()
     }
 }
 

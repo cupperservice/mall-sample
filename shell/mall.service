@@ -1,0 +1,8 @@
+[Unit]
+Description=My Servers service
+[Service]
+ExecStart=/opt/mall/bin/start.sh
+User=root
+Type=simple
+[Install]
+WantedBy=multi-user.target

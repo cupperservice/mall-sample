@@ -1,9 +1,10 @@
 package cupper.hj2.mall.models.repositories
 
 import cupper.hj2.mall.models.entity.Session
+import cupper.hj2.mall.models.entity.User
 
 interface SessionRepository {
-    fun newSession(loginId: String): Session
+    fun newSession(user: User): Session
     fun get(encodedValue: String): Session?
-    fun put(session: Session)
+    fun put(session: Session): Session
 }
