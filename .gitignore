@@ -5,8 +5,6 @@ gradle
 .DS_Store
 logs/
 services/
-gradlew
-gradlew.bat
 
 ### IntelliJ IDEA ###
 .idea
