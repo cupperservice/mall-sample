@@ -6,7 +6,6 @@ import org.springframework.http.HttpStatus
 import org.springframework.web.servlet.HandlerInterceptor
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
-import javax.websocket.Session
 
 class AuthInterceptor(private val sessionRepository: SessionRepository) : HandlerInterceptor{
     override fun preHandle(request: HttpServletRequest, response: HttpServletResponse, handler: Any): Boolean {

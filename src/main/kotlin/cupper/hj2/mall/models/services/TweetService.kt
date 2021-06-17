@@ -1,6 +1,7 @@
 package cupper.hj2.mall.models.services
 
 import cupper.hj2.mall.models.entity.Tweet
+import cupper.hj2.mall.models.entity.User
 import cupper.hj2.mall.models.repositories.HashTagRepository
 import cupper.hj2.mall.models.repositories.TweetRepository
 import org.springframework.stereotype.Service
@@ -18,13 +19,12 @@ class TweetService(
     @Transactional
     fun create(tweet: Tweet): Tweet {
         val tweet = tweetRepository.create(tweet)
-        val h = tweet.hashTags()
         val hashTags = hashTagRepository.create(tweet, tweet.hashTags())
 
         return tweet.copy(hashTags = hashTags)
     }
 
-    fun getMyOwnTweets(userId: String): List<Tweet> {
-        TODO()
+    fun getMyOwnTweets(user: User): List<Tweet> {
+        return tweetRepository.getMyOwnTweets(user.id)
     }
 }

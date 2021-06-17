@@ -6,8 +6,7 @@ import cupper.hj2.mall.settings.SessionConfig
 import java.util.*
 
 data class Session(
-    val loginId: String,
-    val userName: String,
+    val user: User,
     val config: SessionConfig) {
 
     val encodedValue: String by lazy {
@@ -17,7 +16,7 @@ data class Session(
 
         JWT.create()
             .withIssuer(config.issuer)
-            .withSubject(loginId)
+            .withSubject(user.loginId)
             .withExpiresAt(Date(now + config.expirationTime))
             .withIssuedAt(Date(now))
             .sign(algorithm)

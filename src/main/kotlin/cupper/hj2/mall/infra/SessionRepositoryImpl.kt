@@ -25,8 +25,12 @@ class SessionRepositoryImpl(private val sessionConfig: SessionConfig) : SessionR
         val item = client.getItem(request)
 
         return if (item.hasItem()) {
-            Session(loginId = item.item().get("loginId")!!.s(),
-                userName = item.item().get("userName")!!.s(),
+            Session(
+                User(
+                    id = item.item().get("userId")!!.s().toInt(),
+                    loginId = item.item().get("loginId")!!.s(),
+                    password = null,
+                    name = item.item().get("userName")!!.s()),
                 sessionConfig)
         } else {
             return null
@@ -36,8 +40,9 @@ class SessionRepositoryImpl(private val sessionConfig: SessionConfig) : SessionR
     override fun put(session: Session): Session {
         val item = mapOf<String, AttributeValue>(
             "sessionId" to AttributeValue.builder().s(session.encodedValue).build(),
-            "loginId" to AttributeValue.builder().s(session.loginId).build(),
-            "userName" to AttributeValue.builder().s(session.userName).build(),
+            "userId" to AttributeValue.builder().s(session.user.id.toString()).build(),
+            "loginId" to AttributeValue.builder().s(session.user.loginId).build(),
+            "userName" to AttributeValue.builder().s(session.user.name).build(),
             "ttl" to AttributeValue.builder().n("${System.currentTimeMillis() / 1000L + sessionConfig.expirationTime}").build()
         )
 
@@ -52,6 +57,6 @@ class SessionRepositoryImpl(private val sessionConfig: SessionConfig) : SessionR
     }
 
     override fun newSession(user: User): Session {
-        return Session(loginId = user.loginId, userName = user.name, sessionConfig)
+        return Session(user, sessionConfig)
     }
 }
