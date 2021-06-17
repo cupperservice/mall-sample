@@ -27,4 +27,8 @@ class TweetService(
     fun getMyOwnTweets(user: User): List<Tweet> {
         return tweetRepository.getMyOwnTweets(user.id)
     }
+
+    fun fincTweetsByHashTag(tag: String): List<Tweet> {
+        return tweetRepository.findTweetsByHashTag(tag)
+    }
 }

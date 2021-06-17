@@ -49,8 +49,25 @@ class TweetController(
     }
 
     @PostMapping(value = ["/find_by_hash_tag"], produces = [MediaType.APPLICATION_JSON_VALUE])
-    fun findTweetsByHashTag(): List<Tweet> {
-        TODO()
+    fun findTweetsByHashTag(
+        @RequestBody
+        request: FindTweetsByHashTagRequest
+    ): FindTweetsByHashTagResponse {
+        return FindTweetsByHashTagResponse(
+            tweetService.fincTweetsByHashTag(request.tag).map {
+                FindTweetsByHashTagResponseTweet(
+                    id = it.id,
+                    ownerId = it.ownerId,
+                    content = it.content,
+                    hashTags = it.hashTags?.map {
+                        FindTweetsByHashTagResponseHashTag(
+                            id = it.id,
+                            tag = it.tag
+                        )
+                    }
+                )
+            }
+        )
     }
 }
 
@@ -85,6 +102,29 @@ data class GetMyOwnTweetsResponseTweet(
 )
 
 data class GetMyOwnTweetsResponseHashTag(
+    val id: Int,
+    val tag: String
+)
+
+/**
+ * Find tweets by hash tag
+ */
+data class FindTweetsByHashTagRequest(
+    val tag: String
+)
+
+data class FindTweetsByHashTagResponse(
+    val tweets: List<FindTweetsByHashTagResponseTweet>
+)
+
+data class FindTweetsByHashTagResponseTweet(
+    val id: Int,
+    val ownerId: Int,
+    val content: String,
+    val hashTags: List<FindTweetsByHashTagResponseHashTag>?
+)
+
+data class FindTweetsByHashTagResponseHashTag(
     val id: Int,
     val tag: String
 )

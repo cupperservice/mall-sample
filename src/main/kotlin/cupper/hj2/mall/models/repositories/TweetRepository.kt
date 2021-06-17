@@ -6,4 +6,5 @@ interface TweetRepository {
     fun get(id: Int): Tweet?
     fun create(tweet: Tweet): Tweet
     fun getMyOwnTweets(userId: Int): List<Tweet>
+    fun findTweetsByHashTag(tag: String): List<Tweet>
 }

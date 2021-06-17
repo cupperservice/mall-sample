@@ -44,7 +44,6 @@ class TweetRepositoryImpl(private val db: JdbcTemplate) : TweetRepository {
             } else {
                 val tweet = l.last()
                 if (tweet.id == rs.get("tw_id").toString().toInt()) {
-                    val tweet = l.last()
                     val hashTags = tweet.hashTags
                     l.subList(0, l.size - 1) + tweet.copy(hashTags = hashTags!! + HashTag(id = rs.get("tag_id").toString().toInt(), tag = rs.get("tag").toString()))
                 } else {
@@ -58,11 +57,35 @@ class TweetRepositoryImpl(private val db: JdbcTemplate) : TweetRepository {
             }
         }
     }
-}
 
-data class GetOwnTweetRow(
-    val tw_id: Int,
-    val tw_content: String,
-    val tag_id: Int,
-    val tag: String
-)
+    override fun findTweetsByHashTag(tag: String): List<Tweet> {
+        return db.queryForList("""
+            |SELECT tweet.id as tw_id, tweet.content as tw_content, hash_tag.id as tag_id, hash_tag.tag as tag, tweet.owner_id as owner_id
+            |FROM tweet, hash_tag
+            |WHERE hash_tag.tag = ?
+            |  AND hash_tag.tweet_id = tweet.id
+        """.trimMargin(), "#${tag}").fold(listOf<Tweet>()) { l, rs ->
+            if (l.isEmpty()) {
+                l + Tweet(
+                    id = rs.get("tw_id").toString().toInt(),
+                    content = rs.get("tw_content").toString(),
+                    hashTags = listOf(HashTag(rs.get("tag_id").toString().toInt(), rs.get("tag").toString())),
+                    ownerId = rs.get("owner_id").toString().toInt()
+                )
+            } else {
+                val tweet = l.last()
+                if (tweet.id == rs.get("tw_id").toString().toInt()) {
+                    val hashTags = tweet.hashTags
+                    l.subList(0, l.size - 1) + tweet.copy(hashTags = hashTags!! + HashTag(id = rs.get("tag_id").toString().toInt(), tag = rs.get("tag").toString()))
+                } else {
+                    l + Tweet(
+                        id = rs.get("tw_id").toString().toInt(),
+                        content = rs.get("tw_content").toString(),
+                        hashTags = listOf(HashTag(rs.get("tag_id").toString().toInt(), rs.get("tag").toString())),
+                        ownerId = rs.get("owner_id").toString().toInt()
+                    )
+                }
+            }
+        }
+    }
+}
