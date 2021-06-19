@@ -21,3 +21,5 @@ CREATE TABLE hash_tag (
   tweet_id    INT NOT NULL,
   PRIMARY KEY (id)
 );
+
+INSERT INTO users(login_id, password, name) VALUES('sample@example.com', '1BCDBCCFF1C3D3AE287905E0850E6AFBB56010276F0A9A52AE1FF7874EF35726', 'Kazuhisa Kawashima')

@@ -1,5 +1,7 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
+fun property(name: String) = properties[name] as String
+
 plugins {
 	id("org.springframework.boot") version "2.4.5"
 	id("io.spring.dependency-management") version "1.0.11.RELEASE"
@@ -17,21 +19,22 @@ repositories {
 }
 
 dependencies {
-	implementation("org.springframework.boot:spring-boot-starter-data-jdbc")
-	implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
-	implementation("org.springframework.boot:spring-boot-starter-web")
-	implementation("org.springframework.boot:spring-boot-devtools")
+	implementation("org.springframework.boot:spring-boot-starter-data-jdbc:${property("springBootVersion")}")
+	implementation("org.springframework.boot:spring-boot-starter-thymeleaf:${property("springBootVersion")}")
+	implementation("org.springframework.boot:spring-boot-starter-web:${property("springBootVersion")}")
+	implementation("org.springframework.boot:spring-boot-devtools:${property("springBootVersion")}")
+	implementation("org.springframework.boot:spring-boot-starter-security:${property("springBootVersion")}")
 	implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
 	implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
 	implementation(platform("software.amazon.awssdk:bom:2.15.0"))
 	implementation("software.amazon.awssdk:dynamodb")
 	implementation("com.auth0:java-jwt:3.16.0")
-	testImplementation("org.springframework.boot:spring-boot-starter-test")
+	implementation("io.springfox:springfox-swagger2:2.9.2")
+	implementation("io.springfox:springfox-swagger-ui:2.9.2")
+	testImplementation("org.springframework.boot:spring-boot-starter-test:${property("springBootVersion")}")
 	testImplementation("net.bytebuddy:byte-buddy:1.9.12")
 	testImplementation("com.ninja-squad:springmockk:1.1.2")
-//	testImplementation("org.junit.jupiter:junit-jupiter:5.5.1")
-//	testImplementation("com.ninja-squad:springmockk:1.1.2")
 	runtimeOnly("mysql:mysql-connector-java")
 }
 
