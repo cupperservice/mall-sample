@@ -74,7 +74,7 @@ class TweetController(
         request: FindTweetsByHashTagRequest
     ): FindTweetsByHashTagResponse {
         return FindTweetsByHashTagResponse(
-            tweetService.fincTweetsByHashTag(request.tag).map {
+            tweetService.findTweetsByHashTag(request.tag).map {
                 FindTweetsByHashTagResponseTweet(
                     id = it.id,
                     ownerId = it.ownerId,

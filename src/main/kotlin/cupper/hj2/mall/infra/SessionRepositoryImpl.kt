@@ -1,5 +1,7 @@
 package cupper.hj2.mall.infra
 
+import com.auth0.jwt.JWT
+import com.auth0.jwt.algorithms.Algorithm
 import cupper.hj2.mall.models.entity.Session
 import cupper.hj2.mall.models.entity.User
 import cupper.hj2.mall.models.repositories.SessionRepository
@@ -7,8 +9,10 @@ import cupper.hj2.mall.settings.SessionConfig
 import org.springframework.stereotype.Repository
 import software.amazon.awssdk.services.dynamodb.DynamoDbClient
 import software.amazon.awssdk.services.dynamodb.model.AttributeValue
+import software.amazon.awssdk.services.dynamodb.model.DeleteItemRequest
 import software.amazon.awssdk.services.dynamodb.model.GetItemRequest
 import software.amazon.awssdk.services.dynamodb.model.PutItemRequest
+import java.util.*
 
 @Repository
 class SessionRepositoryImpl(private val sessionConfig: SessionConfig) : SessionRepository {
@@ -31,7 +35,7 @@ class SessionRepositoryImpl(private val sessionConfig: SessionConfig) : SessionR
                     loginId = item.item().get("loginId")!!.s(),
                     password = null,
                     name = item.item().get("userName")!!.s()),
-                sessionConfig)
+                sessionConfig, encodedValue)
         } else {
             return null
         }
@@ -57,6 +61,30 @@ class SessionRepositoryImpl(private val sessionConfig: SessionConfig) : SessionR
     }
 
     override fun newSession(user: User): Session {
-        return Session(user, sessionConfig)
+        val now = System.currentTimeMillis()
+
+        val algorithm = Algorithm.HMAC256(sessionConfig.secret)
+
+        val encodedValue = JWT.create()
+            .withIssuer(sessionConfig.issuer)
+            .withSubject(user.loginId)
+            .withExpiresAt(Date(now + sessionConfig.expirationTime))
+            .withIssuedAt(Date(now))
+            .sign(algorithm)
+
+        return Session(user, sessionConfig, encodedValue)
+    }
+
+    override fun delete(session: Session) {
+        val item = mapOf<String, AttributeValue>(
+            "sessionId" to AttributeValue.builder().s(session.encodedValue).build()
+        )
+
+        val request = DeleteItemRequest.builder()
+            .tableName(sessionConfig.tableName)
+            .key(item)
+            .build()
+
+        client.deleteItem(request)
     }
 }

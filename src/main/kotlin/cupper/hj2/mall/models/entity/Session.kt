@@ -7,18 +7,6 @@ import java.util.*
 
 data class Session(
     val user: User,
-    val config: SessionConfig) {
-
-    val encodedValue: String by lazy {
-        val now = System.currentTimeMillis()
-
-        val algorithm = Algorithm.HMAC256(config.secret)
-
-        JWT.create()
-            .withIssuer(config.issuer)
-            .withSubject(user.loginId)
-            .withExpiresAt(Date(now + config.expirationTime))
-            .withIssuedAt(Date(now))
-            .sign(algorithm)
-    }
+    val config: SessionConfig,
+    val encodedValue: String) {
 }

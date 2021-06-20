@@ -7,4 +7,5 @@ interface SessionRepository {
     fun newSession(user: User): Session
     fun get(encodedValue: String): Session?
     fun put(session: Session): Session
+    fun delete(session: Session): Unit
 }

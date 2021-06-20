@@ -9,7 +9,7 @@ import cupper.hj2.mall.models.values.Password
 import org.springframework.stereotype.Service
 
 @Service
-class LoginService(
+class AuthService(
     private val userRepository: UserRepository,
     private val sessionRepository: SessionRepository) {
 
@@ -26,5 +26,9 @@ class LoginService(
                 null
             }
         }
+    }
+
+    fun logout(session: Session) {
+        sessionRepository.delete(session)
     }
 }
