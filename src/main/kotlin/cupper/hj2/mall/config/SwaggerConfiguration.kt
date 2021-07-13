@@ -23,7 +23,7 @@ class SwaggerConfiguration {
     fun api(): Docket = Docket(DocumentationType.SWAGGER_2)
         .select()
         .apis(RequestHandlerSelectors.basePackage("cupper.hj2.mall.controller"))
-        .paths(regex("/v1/.*"))
+        .paths(regex("/v1/.*|/health/.*"))
         .build()
 
     /**
